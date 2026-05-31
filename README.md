@@ -1,4 +1,4 @@
-div align="center">
+
 
 # Rafay's Hyprland Dotfiles
 
