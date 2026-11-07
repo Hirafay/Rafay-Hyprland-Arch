@@ -316,9 +316,9 @@ Rectangle {
         Item {
             id: loginFrame
             anchors.centerIn: parent
+            anchors.horizontalCenterOffset: 0   // shaken by shakeAnim on auth fail
             width: 540
             height: 310
-            transform: Translate { id: shakeT; x: 0 }
 
             // box outline
             Rectangle {
@@ -349,21 +349,12 @@ Rectangle {
                 }
             }
 
-            // corner tick marks (inside corners)
-            Repeater {
-                model: [
-                    [8, 8],   [loginFrame.width - 14, 8],
-                    [8, loginFrame.height - 14],
-                    [loginFrame.width - 14, loginFrame.height - 14]
-                ]
-                delegate: Text {
-                    x: modelData[0]; y: modelData[1]
-                    text: "+"
-                    color: root.cfgMagenta
-                    font.family: root.fontFamily
-                    font.pixelSize: 10
-                }
-            }
+            // corner tick marks (inside corners) — four fixed Texts,
+            // avoids Qt6's strict handling of modelData on array models
+            Text { x: 8;                       y: 8;                        text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
+            Text { x: loginFrame.width - 14;   y: 8;                        text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
+            Text { x: 8;                       y: loginFrame.height - 14;   text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
+            Text { x: loginFrame.width - 14;   y: loginFrame.height - 14;   text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
 
             Column {
                 anchors.fill: parent
@@ -615,15 +606,15 @@ Rectangle {
         }
 
         // ── shake animation on fail ───────────────────────────
-        // Translate the frame via an item translation so centerIn anchors
-        // keep working. Always returns to 0 so repeated fails don't drift.
+        // Animates loginFrame.anchors.horizontalCenterOffset so anchors.centerIn
+        // keeps working. Always returns to 0 so repeated fails don't drift.
         SequentialAnimation {
             id: shakeAnim
-            PropertyAnimation { target: shakeT; property: "x"; to: -10; duration: 45; easing.type: Easing.OutQuad }
-            PropertyAnimation { target: shakeT; property: "x"; to:  10; duration: 45; easing.type: Easing.OutQuad }
-            PropertyAnimation { target: shakeT; property: "x"; to:  -7; duration: 45; easing.type: Easing.OutQuad }
-            PropertyAnimation { target: shakeT; property: "x"; to:   7; duration: 45; easing.type: Easing.OutQuad }
-            PropertyAnimation { target: shakeT; property: "x"; to:   0; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to: -10; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to:  10; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to:  -7; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to:   7; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to:   0; duration: 45; easing.type: Easing.OutQuad }
         }
 
         // ── BOTTOM HUD STRIP ──────────────────────────────────
@@ -711,7 +702,7 @@ Rectangle {
     Item {
         anchors.fill: parent
         focus: true
-        Keys.onPressed: (event) => {
+        Keys.onPressed: function(event) {
             if (event.key === Qt.Key_Escape) {
                 pwField.text = ""
                 errorText.text = ""
