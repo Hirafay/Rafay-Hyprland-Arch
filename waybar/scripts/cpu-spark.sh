@@ -12,6 +12,7 @@ PREV="$STATE_DIR/cpu-prev"
 WIN="$STATE_DIR/cpu-window"
 WIDTH=20
 
+# read /proc/stat top line: cpu u n s i io irq soft steal ...
 read -r _ u n s i rest < /proc/stat
 total=$((u + n + s + i))
 busy=$((u + n + s))
@@ -30,9 +31,17 @@ else
 fi
 printf '%s %s\n' "$total" "$busy" > "$PREV"
 
-touch "$WIN"
-window=$(cat "$WIN")
+# clamp 0..100 defensively (kernel quirks can go negative on counter reset)
+if [ "$pct" -lt 0 ]; then pct=0; fi
+if [ "$pct" -gt 100 ]; then pct=100; fi
+
+# load window, append, trim to WIDTH
+window=""
+[ -s "$WIN" ] && window="$(cat "$WIN")"
 window="$window $pct"
+
+# word-split safely: discard empty tokens from the leading space on first run
+# shellcheck disable=SC2086
 set -- $window
 if [ "$#" -gt "$WIDTH" ]; then
     shift $(( $# - WIDTH ))
@@ -53,5 +62,9 @@ block_for() {
 }
 
 out=""
-for v in $*; do out+="$(block_for "$v")"; done
+if [ "$#" -gt 0 ]; then
+    for v in "$@"; do out+="$(block_for "$v")"; done
+else
+    out="▁"
+fi
 printf '%s\n' "$out"

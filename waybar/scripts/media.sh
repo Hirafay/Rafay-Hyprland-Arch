@@ -1,30 +1,42 @@
 #!/usr/bin/env bash
 # ──────────────────────────────────────────────────────────────
 #  NIGHTWIRE — playerctl → waybar JSON
-#  Emits one JSON per state change. Blocks on playerctl --follow.
+#  Emits an initial empty state, then one JSON per state change
+#  while playerctl --follow emits events. Idle = empty text.
 #  Deps: playerctl.
 # ──────────────────────────────────────────────────────────────
 set -u
 
+emit_empty() {
+    printf '{"text":"","class":"stopped","alt":"Stopped"}\n'
+}
+
 if ! command -v playerctl >/dev/null 2>&1; then
-    echo '{"text":"", "class":"stopped", "alt":"missing playerctl"}'
+    printf '{"text":"","class":"stopped","alt":"missing playerctl"}\n'
     exit 0
 fi
 
+# always print one blank line first so waybar module clears any stale text
+emit_empty
+
 playerctl --follow metadata --format '{"status":"{{status}}","title":"{{title}}","artist":"{{artist}}"}' 2>/dev/null \
 | while IFS= read -r line; do
-    sanitized=$(echo "$line" | tr -d '\000-\037')
+    # strip control chars that would break waybar's JSON parse
+    sanitized=$(printf '%s' "$line" | tr -d '\000-\037')
 
-    status=$(echo "$sanitized"  | sed -n 's/.*"status":"\([^"]*\)".*/\1/p')
-    title=$(echo  "$sanitized"  | sed -n 's/.*"title":"\([^"]*\)".*/\1/p')
-    artist=$(echo "$sanitized"  | sed -n 's/.*"artist":"\([^"]*\)".*/\1/p')
+    status=$(printf '%s' "$sanitized" | sed -n 's/.*"status":"\([^"]*\)".*/\1/p')
+    title=$(printf  '%s' "$sanitized" | sed -n 's/.*"title":"\([^"]*\)".*/\1/p')
+    artist=$(printf '%s' "$sanitized" | sed -n 's/.*"artist":"\([^"]*\)".*/\1/p')
 
     [ -z "$status" ] && status="Stopped"
-    class=$(echo "$status" | tr '[:upper:]' '[:lower:]')
+    class=$(printf '%s' "$status" | tr '[:upper:]' '[:lower:]')
 
-    if [ -z "$title" ]; then
-        text=""
-    elif [ -z "$artist" ]; then
+    if [ "$status" = "Stopped" ] || [ -z "$title" ]; then
+        emit_empty
+        continue
+    fi
+
+    if [ -z "$artist" ]; then
         text="$title"
     else
         text="$artist — $title"

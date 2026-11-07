@@ -307,6 +307,8 @@ apply_sddm_theme() {
     return
   fi
   sudo mkdir -p /etc/sddm.conf.d
+  # wipe any previous theme fragment so we aren't stacking old themes
+  sudo rm -f /etc/sddm.conf.d/theme.conf /etc/sddm.conf.d/00-theme.conf
   sudo tee /etc/sddm.conf.d/theme.conf > /dev/null << SDDM
 [Theme]
 Current=$theme
@@ -373,9 +375,33 @@ backup_configs() {
 
 install_dotfiles() {
   mkdir -p "$HOME/.config"
+
+  # ── clean phase ─────────────────────────────────────────────
+  # wipe every rice-owned dir so nothing from a previous rice,
+  # or a previous install of ours, leaks into the new state.
+  # (backup already ran at step 4 if the user chose it.)
+  info "Clean phase — removing stale rice state"
+  for cfg in "${CONFIGS[@]}"; do
+    if [[ -e "$HOME/.config/$cfg" ]]; then
+      rm -rf "$HOME/.config/$cfg"
+      warn "Wiped ~/.config/$cfg"
+    fi
+  done
+  # file-level stragglers we own
+  for f in starship.toml; do
+    [[ -e "$HOME/.config/$f" ]] && rm -f "$HOME/.config/$f" && warn "Wiped ~/.config/$f"
+  done
+  # hypr state files written by previous installs
+  for f in "$HOME/.config/hypr/wall.png" \
+           "$HOME/.config/hypr/hyprlock.png" \
+           "$HOME/.config/waypaper/config.ini"; do
+    [[ -e "$f" ]] && rm -f "$f"
+  done
+
+  # ── place phase ─────────────────────────────────────────────
+  info "Place phase — copying fresh dotfiles"
   for cfg in "${CONFIGS[@]}"; do
     if [[ -d "$DOTFILES_DIR/$cfg" ]]; then
-      rm -rf "$HOME/.config/$cfg"
       cp -r "$DOTFILES_DIR/$cfg" "$HOME/.config/$cfg"
       ok "Installed ~/.config/$cfg"
     fi
@@ -385,18 +411,20 @@ install_dotfiles() {
     ok "Installed starship.toml"
   fi
 
-  # Hyprland Lua entrypoint sanity
+  # ── verify phase ────────────────────────────────────────────
   if [[ -f "$HOME/.config/hypr/hyprland.lua" ]]; then
     ok "Hyprland Lua config in place (hyprland.lua + modules)"
   else
     warn "hyprland.lua missing — Hyprland 0.55+ won't start"
   fi
 
-  # mark scripts executable
-  if [[ -d "$HOME/.config/hypr/scripts" ]]; then
-    chmod +x "$HOME/.config/hypr/scripts"/*.sh 2>/dev/null
-    ok "Scripts marked executable"
-  fi
+  # mark scripts executable (hypr + waybar)
+  for d in "$HOME/.config/hypr/scripts" "$HOME/.config/waybar/scripts"; do
+    if [[ -d "$d" ]]; then
+      chmod +x "$d"/*.sh 2>/dev/null
+      ok "Scripts marked executable: $(basename "$(dirname "$d")")/scripts"
+    fi
+  done
 }
 
 install_wallpapers() {

@@ -22,6 +22,7 @@ Rectangle {
     property string cfgPhosphor:  config.accentColor     !== "" ? config.accentColor     : "#00ff9c"
     property string cfgText:      config.foregroundColor !== "" ? config.foregroundColor : "#d8e3d4"
     property string cfgDim:       config.dimColor        !== "" ? config.dimColor        : "#1b2330"
+    property string cfgTextDim:   "#7b8a84"
     property string cfgMagenta:   "#ff2975"
     property string cfgCyan:      "#00e5ff"
     property string cfgCrit:      "#ff003c"
@@ -317,6 +318,7 @@ Rectangle {
             anchors.centerIn: parent
             width: 540
             height: 310
+            transform: Translate { id: shakeT; x: 0 }
 
             // box outline
             Rectangle {
@@ -327,25 +329,23 @@ Rectangle {
                 radius: 0
             }
 
-            // header strip
-            Row {
-                x: 14
+            // header strip — sits over the top border, void bg masks the line behind the text
+            Rectangle {
+                id: headerBg
+                x: 20
                 y: -8
-                spacing: 0
-                Rectangle { width: 10; height: 16; color: root.cfgVoid }
+                width: headerText.implicitWidth + 16
+                height: 16
+                color: root.cfgVoid
+                z: 2
                 Text {
+                    id: headerText
+                    anchors.centerIn: parent
                     text: "╡ NIGHTWIRE // auth-prompt ╞"
                     color: root.cfgPhosphor
                     font.family: root.fontFamily
                     font.pixelSize: 12
                     font.weight: Font.Bold
-                    anchors.verticalCenter: parent.verticalCenter
-                    leftPadding: 4; rightPadding: 4
-                    Rectangle {
-                        anchors.fill: parent
-                        color: root.cfgVoid
-                        z: -1
-                    }
                 }
             }
 
@@ -615,12 +615,15 @@ Rectangle {
         }
 
         // ── shake animation on fail ───────────────────────────
+        // Translate the frame via an item translation so centerIn anchors
+        // keep working. Always returns to 0 so repeated fails don't drift.
         SequentialAnimation {
             id: shakeAnim
-            loops: 2
-            NumberAnimation { target: loginFrame; property: "x"; from: 0; to: -8;  duration: 40; easing.type: Easing.Linear }
-            NumberAnimation { target: loginFrame; property: "x"; from: -8; to: 8;  duration: 40; easing.type: Easing.Linear }
-            NumberAnimation { target: loginFrame; property: "x"; from: 8;  to: 0;  duration: 40; easing.type: Easing.Linear }
+            PropertyAnimation { target: shakeT; property: "x"; to: -10; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: shakeT; property: "x"; to:  10; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: shakeT; property: "x"; to:  -7; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: shakeT; property: "x"; to:   7; duration: 45; easing.type: Easing.OutQuad }
+            PropertyAnimation { target: shakeT; property: "x"; to:   0; duration: 45; easing.type: Easing.OutQuad }
         }
 
         // ── BOTTOM HUD STRIP ──────────────────────────────────
@@ -721,8 +724,6 @@ Rectangle {
             }
         }
     }
-
-    property string cfgTextDim: "#7b8a84"
 
     Component.onCompleted: pwField.forceActiveFocus()
 }

@@ -1,16 +1,18 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # ─────────────────────────────────────────────────────────────
-#  Starship — AMBERPHOSPHOR
-#  Minimal two-line prompt: segment bar / shell prompt
+#  Starship — NIGHTWIRE
+#  Two-line HUD prompt: segment bar / exec line.
+#  Phosphor-green primary, hot magenta on git state,
+#  cyan on tools, amber on time, red on error.
 # ─────────────────────────────────────────────────────────────
 
 format = """
-[╭─](amber)\
+[╭─](phosphor)\
 $os\
 $username\
 $hostname\
-[](bg:dim fg:amber)\
+[](bg:dim fg:phosphor)\
 $directory\
 [](bg:deep fg:dim)\
 $git_branch\
@@ -21,23 +23,26 @@ $docker_context\
 $conda\
 $time\
 $line_break\
-[╰─](amber)$character"""
+[╰─](phosphor)$character"""
 
 add_newline = true
-palette = "amber"
+palette = "nightwire"
 
-[palettes.amber]
-amber  = "#ffb000"
-sun    = "#ff8800"
-flare  = "#ff4b00"
-dim    = "#1a1a1a"
-deep   = "#141414"
-bg     = "#0a0a0a"
-fg     = "#ffe0a0"
+[palettes.nightwire]
+phosphor = "#00ff9c"    # primary accent (same as waybar/hyprland phosphor)
+magenta  = "#ff2975"    # secondary / git dirty
+cyan     = "#00e5ff"    # tertiary / tools
+amber    = "#ffb000"    # warning / time
+crit     = "#ff003c"    # error prompt char
+dim      = "#0f141c"    # mid surface (directory bg)
+deep     = "#0a0e14"    # deeper surface (git bg)
+void     = "#05070a"    # base void
+fg       = "#d8e3d4"    # bone-phosphor fg
+dim_fg   = "#7b8a84"    # muted fg
 
 [os]
 disabled = false
-style = "bg:amber fg:bg"
+style = "bg:phosphor fg:void"
 format = "[ $symbol ]($style)"
 
 [os.symbols]
@@ -49,26 +54,27 @@ Garuda       = "󰛓"
 Ubuntu       = ""
 Debian       = ""
 Fedora       = ""
+NixOS        = "󱄅"
 
 [username]
 show_always = true
-style_user = "bg:amber fg:bg bold"
-style_root = "bg:flare fg:bg bold"
+style_user = "bg:phosphor fg:void bold"
+style_root = "bg:crit    fg:void bold"
 format = "[ $user ]($style)"
 
 [hostname]
 ssh_only = false
-style = "bg:amber fg:bg"
+style = "bg:phosphor fg:void"
 format = "[@$hostname ]($style)"
 disabled = false
 
 [directory]
-style = "bg:dim fg:amber bold"
+style = "bg:dim fg:phosphor bold"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 read_only = " "
-read_only_style = "bg:dim fg:flare"
+read_only_style = "bg:dim fg:crit"
 
 [directory.substitutions]
 "Documents"  = "󰈙 "
@@ -82,42 +88,85 @@ read_only_style = "bg:dim fg:flare"
 [git_branch]
 symbol = ""
 style = "bg:deep"
-format = '[[ $symbol $branch ](fg:amber bg:deep)]($style)'
+format = '[[ $symbol $branch ](fg:magenta bg:deep)]($style)'
 
 [git_status]
 style = "bg:deep"
-format = '[[($all_status$ahead_behind )](fg:sun bg:deep)]($style)'
-ahead = "⇡${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-behind = "⇣${count}"
+format = '[[($all_status$ahead_behind )](fg:amber bg:deep)]($style)'
+ahead     = "⇡${count}"
+diverged  = "⇕⇡${ahead_count}⇣${behind_count}"
+behind    = "⇣${count}"
 conflicted = "="
-modified = "!${count}"
-staged = "+${count}"
+modified  = "!${count}"
+staged    = "+${count}"
 untracked = "?${count}"
-deleted = "✘${count}"
-renamed = "»${count}"
-stashed = "\\$${count}"
+deleted   = "✘${count}"
+renamed   = "»${count}"
+stashed   = "\\$${count}"
 
-[nodejs]      ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[bun]         ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[c]           ; symbol = " ";  style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[cpp]         ; symbol = " ";  style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[rust]        ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[golang]      ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[python]      ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[kotlin]      ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[java]        ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[php]         ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
-[haskell]     ; symbol = " ";   style = "fg:fg bg:bg"; format = '[[ $symbol($version) ](fg:amber)]($style)'
+[nodejs]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[bun]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[c]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[cpp]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[rust]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[golang]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[python]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[kotlin]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[java]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[php]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
+
+[haskell]
+symbol = " "
+style = "fg:fg bg:void"
+format = '[[ $symbol($version) ](fg:cyan)]($style)'
 
 [docker_context]
 symbol = " "
-style = "fg:sun"
+style = "fg:magenta"
 format = '[ $symbol$context ]($style)'
 
 [conda]
 symbol = " "
-style = "fg:sun"
+style = "fg:magenta"
 format = '[ $symbol$environment ]($style)'
 
 [time]
@@ -131,6 +180,6 @@ disabled = false
 
 [character]
 disabled = false
-success_symbol = "[](bold fg:amber)"
-error_symbol   = "[](bold fg:flare)"
-vimcmd_symbol  = "[](bold fg:sun)"
+success_symbol = "[](bold fg:phosphor)"
+error_symbol   = "[](bold fg:crit)"
+vimcmd_symbol  = "[](bold fg:cyan)"
