@@ -1,15 +1,16 @@
 // ──────────────────────────────────────────────────────────────
 //  NIGHTWIRE — SDDM greeter for Rafay-Hyprland-Arch
-//  Terminal-HUD login. Scanlines, CRT vignette, matrix rain,
-//  boot-log cold-start, box-drawing frame around the prompt.
-//  Qt5 + Qt6 SDDM builds. No QML modules beyond QtQuick core.
+//  Terminal-HUD login. Pure QtQuick. No QtQuick.Controls,
+//  no Layouts, no Shapes — only core primitives + Canvas +
+//  a hand-rolled TextInput for the password field.
+//
+//  Works on every SDDM build (Qt5 and Qt6) because it needs
+//  only QtQuick 2.x — the one module SDDM always ships.
 //
 //  Globals from SDDM: config, userModel, sessionModel, sddm
 // ──────────────────────────────────────────────────────────────
 
 import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root
@@ -17,7 +18,7 @@ Rectangle {
     height: 1080
     color: cfgVoid
 
-    // ── palette (overrideable via theme.conf) ─────────────────
+    // ── palette (theme.conf overrides) ────────────────────────
     property string cfgVoid:      config.backgroundColor !== "" ? config.backgroundColor : "#05070a"
     property string cfgPhosphor:  config.accentColor     !== "" ? config.accentColor     : "#00ff9c"
     property string cfgText:      config.foregroundColor !== "" ? config.foregroundColor : "#d8e3d4"
@@ -30,9 +31,24 @@ Rectangle {
     property string fontFamily:   config.fontFamily      !== "" ? config.fontFamily      : "JetBrainsMono Nerd Font"
     property int    baseFontSize: config.fontSize        !== "" ? parseInt(config.fontSize) : 12
 
+    // ── selectable session + user (we use SDDM's models manually) ──
+    property int sessionIndex: sessionModel && sessionModel.lastIndex !== undefined && sessionModel.lastIndex >= 0 ? sessionModel.lastIndex : 0
+    property int userIndex:    userModel    && userModel.lastIndex    !== undefined && userModel.lastIndex    >= 0 ? userModel.lastIndex    : 0
+
+    function currentUserName() {
+        if (!userModel) return ""
+        var idx = userModel.index(userIndex, 0)
+        return userModel.data(idx, Qt.UserRole + 1) || ""
+    }
+    function currentSessionName() {
+        if (!sessionModel) return ""
+        var idx = sessionModel.index(sessionIndex, 0)
+        return sessionModel.data(idx, Qt.UserRole + 4) || "Session"
+    }
+
     // ── boot-sequence state ───────────────────────────────────
-    property bool   bootDone: false
-    property real   contentOpacity: 0.0
+    property bool bootDone: false
+    property real contentOpacity: 0.0
 
     // ── wallpaper (dim, behind everything) ────────────────────
     Image {
@@ -67,7 +83,6 @@ Rectangle {
 
         onPaint: {
             var ctx = getContext("2d")
-            // low-alpha dark overlay to fade previous frame
             ctx.fillStyle = "rgba(5, 7, 10, 0.08)"
             ctx.fillRect(0, 0, width, height)
 
@@ -76,10 +91,8 @@ Rectangle {
                 var ch = chars.charAt(Math.floor(Math.random() * chars.length))
                 var x = i * 14
                 var y = drops[i] * 18
-                // leading char brighter
                 ctx.fillStyle = root.cfgPhosphor
                 ctx.fillText(ch, x, y)
-                // trail
                 ctx.fillStyle = "rgba(0, 255, 156, 0.35)"
                 ctx.fillText(chars.charAt(Math.floor(Math.random() * chars.length)),
                              x, y - 18)
@@ -120,7 +133,6 @@ Rectangle {
     // ── CRT VIGNETTE ──────────────────────────────────────────
     Rectangle {
         anchors.fill: parent
-        radius: 0
         gradient: Gradient {
             orientation: Gradient.Vertical
             GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, 0.55) }
@@ -218,61 +230,54 @@ Rectangle {
         visible: root.bootDone
 
         // ── TOP BAR: machine readouts ─────────────────────────
-        Rectangle {
-            id: topBar
-            anchors { top: parent.top; left: parent.left; right: parent.right }
-            height: 28
-            color: "transparent"
+        Row {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.leftMargin: 20
+            anchors.topMargin: 14
+            spacing: 18
 
-            Row {
-                anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 18
-
-                Text {
-                    text: "╔═ NIGHTWIRE ══ rafay-hyprland-arch ═╗"
-                    color: root.cfgPhosphor
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                    font.weight: Font.Bold
-                }
-                Text {
-                    text: "[ sddm-greeter · qt6 ]"
-                    color: root.cfgMagenta
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                }
-                Text {
-                    text: "[ tty: dpy-0 ]"
-                    color: root.cfgCyan
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                }
+            Text {
+                text: "╔═ NIGHTWIRE ══ rafay-hyprland-arch ═╗"
+                color: root.cfgPhosphor
+                font.family: root.fontFamily
+                font.pixelSize: 11
+                font.weight: Font.Bold
             }
-            Row {
-                anchors.right: parent.right
-                anchors.rightMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 14
+            Text {
+                text: "[ sddm-greeter · pure-qtquick ]"
+                color: root.cfgMagenta
+                font.family: root.fontFamily
+                font.pixelSize: 11
+            }
+            Text {
+                text: "[ tty: dpy-0 ]"
+                color: root.cfgCyan
+                font.family: root.fontFamily
+                font.pixelSize: 11
+            }
+        }
 
-                Text {
-                    id: caps
-                    text: "[ CAPS·OFF ]"
-                    color: root.cfgTextDim
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                    property bool on: false
-                    // SDDM doesn't give us caps-lock reliably; placeholder slot
-                }
-                Text {
-                    id: topClock
-                    text: Qt.formatTime(new Date(), "hh:mm:ss")
-                    color: root.cfgPhosphor
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                    font.weight: Font.Bold
-                }
+        Row {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.rightMargin: 20
+            anchors.topMargin: 14
+            spacing: 14
+
+            Text {
+                text: "[ CAPS·OFF ]"
+                color: root.cfgTextDim
+                font.family: root.fontFamily
+                font.pixelSize: 11
+            }
+            Text {
+                id: topClock
+                text: Qt.formatTime(new Date(), "hh:mm:ss")
+                color: root.cfgPhosphor
+                font.family: root.fontFamily
+                font.pixelSize: 11
+                font.weight: Font.Bold
             }
         }
 
@@ -316,7 +321,7 @@ Rectangle {
         Item {
             id: loginFrame
             anchors.centerIn: parent
-            anchors.horizontalCenterOffset: 0   // shaken by shakeAnim on auth fail
+            anchors.horizontalCenterOffset: 0   // shake animates this
             width: 540
             height: 310
 
@@ -329,7 +334,7 @@ Rectangle {
                 radius: 0
             }
 
-            // header strip — sits over the top border, void bg masks the line behind the text
+            // header strip — sits over the top border
             Rectangle {
                 id: headerBg
                 x: 20
@@ -349,8 +354,7 @@ Rectangle {
                 }
             }
 
-            // corner tick marks (inside corners) — four fixed Texts,
-            // avoids Qt6's strict handling of modelData on array models
+            // four corner ticks
             Text { x: 8;                       y: 8;                        text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
             Text { x: loginFrame.width - 14;   y: 8;                        text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
             Text { x: 8;                       y: loginFrame.height - 14;   text: "+"; color: root.cfgMagenta; font.family: root.fontFamily; font.pixelSize: 10 }
@@ -361,7 +365,7 @@ Rectangle {
                 anchors.margins: 28
                 spacing: 14
 
-                // user line
+                // ── user line ────────────────────────────────
                 Row {
                     spacing: 0
                     Text {
@@ -371,135 +375,20 @@ Rectangle {
                         font.pixelSize: 14
                         anchors.verticalCenter: parent.verticalCenter
                     }
-                    ComboBox {
-                        id: userList
-                        width: 240
-                        height: 26
-                        model: userModel
-                        textRole: "name"
-                        currentIndex: userModel.lastIndex !== undefined && userModel.lastIndex >= 0
-                                      ? userModel.lastIndex : 0
-
-                        contentItem: Text {
-                            text: "[ " + userList.displayText + " ]"
-                            color: root.cfgPhosphor
-                            font.family: root.fontFamily
-                            font.pixelSize: 14
-                            font.weight: Font.Bold
-                            verticalAlignment: Text.AlignVCenter
-                            leftPadding: 4
-                        }
-                        background: Rectangle {
-                            color: "transparent"
-                        }
-                        indicator: Text {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 4
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "▼"
-                            color: root.cfgMagenta
-                            font.family: root.fontFamily
-                            font.pixelSize: 10
-                        }
-                    }
-                }
-
-                // prompt separator line
-                Text {
-                    width: parent.width
-                    text: "─────────────────────────────────────────────────"
-                    color: root.cfgDim
-                    font.family: root.fontFamily
-                    font.pixelSize: 11
-                    elide: Text.ElideRight
-                }
-
-                // password line
-                Row {
-                    spacing: 0
-                    width: parent.width
                     Text {
-                        text: "> passwd : "
-                        color: root.cfgTextDim
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    TextField {
-                        id: pwField
-                        width: parent.width - 100
-                        echoMode: TextInput.Password
-                        passwordCharacter: "●"
-                        placeholderText: "_"
-                        placeholderTextColor: root.cfgTextDim
+                        text: "[ " + root.currentUserName() + " ]"
                         color: root.cfgPhosphor
                         font.family: root.fontFamily
                         font.pixelSize: 14
                         font.weight: Font.Bold
-                        focus: true
-                        selectByMouse: true
-                        cursorDelegate: Rectangle {
-                            width: 2
-                            color: root.cfgPhosphor
-                            SequentialAnimation on opacity {
-                                loops: Animation.Infinite
-                                NumberAnimation { to: 0.0; duration: 500 }
-                                NumberAnimation { to: 1.0; duration: 500 }
-                            }
-                        }
-                        background: Rectangle {
-                            color: "transparent"
-                            // thin underline, phosphor when focused
-                            Rectangle {
-                                anchors.bottom: parent.bottom
-                                width: parent.width
-                                height: 1
-                                color: pwField.activeFocus ? root.cfgPhosphor : root.cfgDim
-                            }
-                        }
-                        Keys.onReturnPressed: loginButton.clicked()
-                        Keys.onEnterPressed:  loginButton.clicked()
-                    }
-                }
-
-                // session cycle
-                Row {
-                    spacing: 0
-                    Text {
-                        text: "> session: "
-                        color: root.cfgTextDim
-                        font.family: root.fontFamily
-                        font.pixelSize: 14
                         anchors.verticalCenter: parent.verticalCenter
                     }
-                    ComboBox {
-                        id: sessionList
-                        width: 200
-                        height: 26
-                        model: sessionModel
-                        textRole: "name"
-                        currentIndex: sessionModel.lastIndex !== undefined && sessionModel.lastIndex >= 0
-                                      ? sessionModel.lastIndex : 0
-
-                        contentItem: Text {
-                            text: "[ " + sessionList.displayText + " ]"
-                            color: root.cfgCyan
-                            font.family: root.fontFamily
-                            font.pixelSize: 14
-                            font.weight: Font.Bold
-                            verticalAlignment: Text.AlignVCenter
-                            leftPadding: 4
-                        }
-                        background: Rectangle { color: "transparent" }
-                        indicator: Text {
-                            anchors.right: parent.right
-                            anchors.rightMargin: 4
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "▼"
-                            color: root.cfgMagenta
-                            font.family: root.fontFamily
-                            font.pixelSize: 10
-                        }
+                    Text {
+                        text: "  [F2 to cycle]"
+                        color: root.cfgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: 11
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 
@@ -511,86 +400,190 @@ Rectangle {
                     font.pixelSize: 11
                 }
 
-                // login button line
+                // ── password line (hand-rolled TextInput) ────
                 Row {
-                    spacing: 18
+                    spacing: 0
                     width: parent.width
 
-                    Button {
-                        id: loginButton
-                        height: 32
-                        text: "[ EXEC · login ]"
-
-                        background: Rectangle {
-                            color: loginButton.hovered
-                                ? root.cfgPhosphor
-                                : Qt.rgba(0, 1, 0.61, 0.08)
-                            border.color: root.cfgPhosphor
-                            border.width: 1
-                            radius: 0
-                        }
-                        contentItem: Text {
-                            text: loginButton.text
-                            color: loginButton.hovered ? root.cfgVoid : root.cfgPhosphor
-                            font.family: root.fontFamily
-                            font.pixelSize: 13
-                            font.weight: Font.Bold
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            leftPadding: 16
-                            rightPadding: 16
-                        }
-                        onClicked: sddm.login(userList.currentText,
-                                              pwField.text,
-                                              sessionList.currentIndex)
+                    Text {
+                        text: "> passwd : "
+                        color: root.cfgTextDim
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
-                    // reboot
-                    Button {
-                        height: 32
-                        contentItem: Text {
-                            text: "[ R ]"
-                            color: parent.hovered ? root.cfgVoid : root.cfgCyan
-                            font.family: root.fontFamily
-                            font.pixelSize: 13
-                            font.weight: Font.Bold
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            leftPadding: 12; rightPadding: 12
-                        }
-                        background: Rectangle {
-                            color: parent.hovered ? root.cfgCyan : Qt.rgba(0, 0.89, 1, 0.07)
-                            border.color: root.cfgCyan
-                            border.width: 1
-                            radius: 0
-                        }
-                        onClicked: sddm.reboot()
-                    }
+                    Rectangle {
+                        width: parent.width - 100
+                        height: 28
+                        color: "transparent"
+                        anchors.verticalCenter: parent.verticalCenter
 
-                    // shutdown
-                    Button {
-                        height: 32
-                        contentItem: Text {
-                            text: "[ ⏻ ]"
-                            color: parent.hovered ? root.cfgVoid : root.cfgCrit
+                        TextInput {
+                            id: pwField
+                            anchors.fill: parent
+                            anchors.leftMargin: 2
+                            verticalAlignment: TextInput.AlignVCenter
+                            echoMode: TextInput.Password
+                            passwordCharacter: "●"
+                            color: root.cfgPhosphor
                             font.family: root.fontFamily
-                            font.pixelSize: 13
+                            font.pixelSize: 14
                             font.weight: Font.Bold
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            leftPadding: 12; rightPadding: 12
+                            focus: true
+                            selectByMouse: true
+                            cursorDelegate: Rectangle {
+                                width: 2
+                                color: root.cfgPhosphor
+                                SequentialAnimation on opacity {
+                                    loops: Animation.Infinite
+                                    NumberAnimation { to: 0.0; duration: 500 }
+                                    NumberAnimation { to: 1.0; duration: 500 }
+                                }
+                            }
+                            Keys.onReturnPressed: root.submitLogin()
+                            Keys.onEnterPressed:  root.submitLogin()
                         }
-                        background: Rectangle {
-                            color: parent.hovered ? root.cfgCrit : Qt.rgba(1, 0, 0.24, 0.08)
-                            border.color: root.cfgCrit
-                            border.width: 1
-                            radius: 0
+
+                        // placeholder when empty
+                        Text {
+                            anchors.left: parent.left
+                            anchors.leftMargin: 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "_"
+                            color: root.cfgTextDim
+                            font.family: root.fontFamily
+                            font.pixelSize: 14
+                            visible: pwField.text.length === 0
                         }
-                        onClicked: sddm.powerOff()
+
+                        // underline
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.bottom: parent.bottom
+                            height: 1
+                            color: pwField.activeFocus ? root.cfgPhosphor : root.cfgDim
+                        }
                     }
                 }
 
-                // error line
+                // ── session line ─────────────────────────────
+                Row {
+                    spacing: 0
+                    Text {
+                        text: "> session: "
+                        color: root.cfgTextDim
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: "[ " + root.currentSessionName() + " ]"
+                        color: root.cfgCyan
+                        font.family: root.fontFamily
+                        font.pixelSize: 14
+                        font.weight: Font.Bold
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        text: "  [F1 to cycle]"
+                        color: root.cfgDim
+                        font.family: root.fontFamily
+                        font.pixelSize: 11
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                // separator
+                Text {
+                    text: "─────────────────────────────────────────────────"
+                    color: root.cfgDim
+                    font.family: root.fontFamily
+                    font.pixelSize: 11
+                }
+
+                // ── button row (Rectangles with MouseAreas, no Controls) ──
+                Row {
+                    spacing: 18
+
+                    // login
+                    Rectangle {
+                        width: 180; height: 32
+                        color: loginMA.containsMouse ? root.cfgPhosphor : Qt.rgba(0, 1, 0.61, 0.08)
+                        border.color: root.cfgPhosphor
+                        border.width: 1
+                        radius: 0
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "[ EXEC · login ]"
+                            color: loginMA.containsMouse ? root.cfgVoid : root.cfgPhosphor
+                            font.family: root.fontFamily
+                            font.pixelSize: 13
+                            font.weight: Font.Bold
+                        }
+                        MouseArea {
+                            id: loginMA
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.submitLogin()
+                        }
+                    }
+
+                    // reboot
+                    Rectangle {
+                        width: 48; height: 32
+                        color: rebootMA.containsMouse ? root.cfgCyan : Qt.rgba(0, 0.89, 1, 0.07)
+                        border.color: root.cfgCyan
+                        border.width: 1
+                        radius: 0
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "[ R ]"
+                            color: rebootMA.containsMouse ? root.cfgVoid : root.cfgCyan
+                            font.family: root.fontFamily
+                            font.pixelSize: 13
+                            font.weight: Font.Bold
+                        }
+                        MouseArea {
+                            id: rebootMA
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: sddm.reboot()
+                        }
+                    }
+
+                    // shutdown
+                    Rectangle {
+                        width: 48; height: 32
+                        color: offMA.containsMouse ? root.cfgCrit : Qt.rgba(1, 0, 0.24, 0.08)
+                        border.color: root.cfgCrit
+                        border.width: 1
+                        radius: 0
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: "[ ⏻ ]"
+                            color: offMA.containsMouse ? root.cfgVoid : root.cfgCrit
+                            font.family: root.fontFamily
+                            font.pixelSize: 13
+                            font.weight: Font.Bold
+                        }
+                        MouseArea {
+                            id: offMA
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: sddm.powerOff()
+                        }
+                    }
+                }
+
+                // ── error line ───────────────────────────────
                 Text {
                     id: errorText
                     width: parent.width
@@ -598,7 +591,6 @@ Rectangle {
                     font.family: root.fontFamily
                     font.pixelSize: 13
                     font.weight: Font.Bold
-                    horizontalAlignment: Text.AlignLeft
                     text: ""
                     visible: text.length > 0
                 }
@@ -606,8 +598,6 @@ Rectangle {
         }
 
         // ── shake animation on fail ───────────────────────────
-        // Animates loginFrame.anchors.horizontalCenterOffset so anchors.centerIn
-        // keeps working. Always returns to 0 so repeated fails don't drift.
         SequentialAnimation {
             id: shakeAnim
             PropertyAnimation { target: loginFrame.anchors; property: "horizontalCenterOffset"; to: -10; duration: 45; easing.type: Easing.OutQuad }
@@ -626,13 +616,13 @@ Rectangle {
             spacing: 22
 
             Text {
-                text: "╚═ nightwire · build 2.0.0 ·  " + userList.currentText + "@multan"
+                text: "╚═ nightwire · build 2.0.0 · " + root.currentUserName() + "@multan"
                 color: root.cfgPhosphor
                 font.family: root.fontFamily
                 font.pixelSize: 11
             }
             Text {
-                text: "// hyprland-session · qt6-declarative · phosphor-rev-04"
+                text: "// hyprland-session · qt-declarative · phosphor-rev-04"
                 color: root.cfgTextDim
                 font.family: root.fontFamily
                 font.pixelSize: 11
@@ -656,12 +646,17 @@ Rectangle {
         }
     }
 
+    // ── login submit (used by button + Enter in pw) ───────────
+    function submitLogin() {
+        sddm.login(currentUserName(), pwField.text, sessionIndex)
+    }
+
     // ── live clock tick ───────────────────────────────────────
     Timer {
         interval: 1000; running: true; repeat: true
         onTriggered: {
             var d = new Date()
-            if (bigClock.visible) {
+            if (root.bootDone) {
                 bigClock.text = Qt.formatTime(d, "hh:mm:ss")
                 dateText.text = Qt.formatDate(d, "dddd · dd MMM yyyy").toUpperCase()
             }
@@ -698,7 +693,7 @@ Rectangle {
         NumberAnimation { target: successOverlay; property: "opacity"; to: 0.00; duration: 320 }
     }
 
-    // ── keyboard shortcut handling (ESC clears, F-keys cycle) ──
+    // ── keyboard shortcuts (ESC clears, F-keys cycle) ─────────
     Item {
         anchors.fill: parent
         focus: true
@@ -706,12 +701,12 @@ Rectangle {
             if (event.key === Qt.Key_Escape) {
                 pwField.text = ""
                 errorText.text = ""
-            } else if (event.key === Qt.Key_F1) {
-                sessionList.currentIndex =
-                    (sessionList.currentIndex + 1) % sessionModel.rowCount()
-            } else if (event.key === Qt.Key_F2) {
-                userList.currentIndex =
-                    (userList.currentIndex + 1) % userModel.rowCount()
+            } else if (event.key === Qt.Key_F1 && sessionModel) {
+                var scount = sessionModel.rowCount ? sessionModel.rowCount() : 1
+                if (scount > 0) root.sessionIndex = (root.sessionIndex + 1) % scount
+            } else if (event.key === Qt.Key_F2 && userModel) {
+                var ucount = userModel.rowCount ? userModel.rowCount() : 1
+                if (ucount > 0) root.userIndex = (root.userIndex + 1) % ucount
             }
         }
     }

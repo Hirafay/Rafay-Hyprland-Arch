@@ -258,11 +258,18 @@ install_our_sddm_theme() {
     warn "sddm-theme/ missing from repo — skipping"
     return 1
   fi
-  if [[ -d "$dst" ]]; then
-    warn "nightwire SDDM theme exists — refreshing"
-    sudo rm -rf "$dst"
-  fi
+
+  # ── full wipe of anything SDDM might have cached from a previous rice ─
+  # kills the theme dir, any stacked conf.d fragments, and the state cache
+  info "SDDM clean phase — wiping previous theme state"
+  sudo rm -rf "$dst"
+  sudo rm -rf /usr/share/sddm/themes/nightwire-* 2>/dev/null || true
+  sudo rm -f /etc/sddm.conf.d/theme.conf /etc/sddm.conf.d/00-theme.conf 2>/dev/null || true
+  sudo rm -rf /var/lib/sddm/.cache 2>/dev/null || true   # per-user cached QML compile
+
+  # ── place phase ─────────────────────────────────────────────
   sudo cp -r "$src" "$dst"
+  sudo chmod -R u=rwX,go=rX "$dst"
 
   # drop a wallpaper in so the QML has something to show
   if [[ -f "$HOME/.config/hypr/wall.png" ]]; then
@@ -272,7 +279,7 @@ install_our_sddm_theme() {
   elif [[ -f "$DOTFILES_DIR/preview.png" ]]; then
     sudo cp "$DOTFILES_DIR/preview.png" "$dst/wall.png"
   fi
-  ok "nightwire SDDM theme installed"
+  ok "nightwire SDDM theme installed (fresh — nothing stacked)"
   return 0
 }
 
@@ -290,7 +297,12 @@ pick_sddm_theme() {
   echo -e "  ${GREEN}4)${NC} corners        (minimal dark)" >&2
   echo -e "  ${GREEN}5)${NC} keep default" >&2
   echo -ne "  Choice [1-5]: " >&2
-  read -r tc
+  local tc=""
+  if [[ -r /dev/tty ]]; then
+    read -r tc < /dev/tty
+  else
+    read -r tc
+  fi
   case "$tc" in
     1) install_our_sddm_theme >&2 && echo "nightwire" || echo "" ;;
     2) install_sddm_theme "sugar-candy" "https://framagit.org/MarianArlt/sddm-sugar-candy.git" >&2 && echo "sugar-candy" || echo "" ;;
@@ -589,7 +601,15 @@ pick_preset() {
   echo -e "  ${GREEN}2)${NC} ${BOLD}Full${NC}     — everything shipped (recommended)" >&2
   echo -e "  ${GREEN}3)${NC} ${BOLD}Dev${NC}      — Full + neovim/tmux/gh/lazygit/python/node" >&2
   echo -ne "  Choice [1-3, default 2]: " >&2
-  local c; read -r c; c="${c:-2}"
+  # read from the controlling terminal directly — command substitution
+  # ($()) detaches stdin from the tty, which is why it needed multiple keys
+  local c=""
+  if [[ -r /dev/tty ]]; then
+    read -r c < /dev/tty
+  else
+    read -r c
+  fi
+  c="${c:-2}"
   case "$c" in
     1) echo "minimal" ;;
     3) echo "dev" ;;
