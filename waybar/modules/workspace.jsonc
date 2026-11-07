@@ -1,0 +1,42 @@
+{
+  "hyprland/workspaces": {
+    "format": "{icon} {windows}",
+    "format-window-separator": " ",
+    "window-rewrite-separator": " ",
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "window-rewrite-default": "󰊠",
+    "window-rewrite": {
+      "kitty":                 "󰆍",
+      "alacritty":             "󰆍",
+      "onlyoffice":            "󰏆",
+      "firefox":               "",
+      "chromium":              "",
+      "code":                  "󰨞",
+      "obsidian":              "󰹕",
+      "mousepad":              "󱓧",
+      "discord":               "",
+      "spotify":               "",
+      "org.kde.kdeconnect.app":"󰦉",
+      "thunar":                "",
+      "yazi":                  "󰇥",
+      "imv":                   "󰄄",
+      "vlc":                   "󰕼",
+      "mpv":                   "󰕼",
+      "blueman-manager":       "",
+      "pavucontrol":           "󱕂",
+      "nm-connection-editor":  "󰐻"
+    },
+    "format-icons": {
+      "active": "󰮯",
+      "special": "󱁂",
+      "default": "󰊠",
+      "urgent": "󰧵",
+      "empty": ""
+    },
+    "show-special": true,
+    "all-outputs": true
+  }
+}

@@ -1,0 +1,74 @@
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE — wofi launcher (lush)
+ *  Big rounded corners, generous entry padding, phosphor accent
+ *  on selection, subtle phosphor glow on focus.
+ * ──────────────────────────────────────────────────────────── */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 14px;
+    border: none;
+    border-radius: 0;
+}
+
+window {
+    background-color: rgba(5, 7, 10, 0.92);
+    border: 1px solid rgba(0, 255, 156, 0.35);
+    border-radius: 24px;
+    padding: 6px;
+}
+
+#input {
+    background-color: rgba(15, 20, 28, 0.9);
+    color: #d8e3d4;
+    border: 1px solid rgba(0, 255, 156, 0.25);
+    border-radius: 18px;
+    padding: 14px 20px;
+    margin: 12px;
+    caret-color: #00ff9c;
+    outline: none;
+}
+
+#input:focus {
+    border-color: #00ff9c;
+    box-shadow: 0 0 0 2px rgba(0, 255, 156, 0.18);
+}
+
+#outer-box {
+    padding: 4px;
+}
+
+#scroll {
+    margin: 0 10px 10px 10px;
+}
+
+#inner-box {
+    margin: 0;
+}
+
+#entry {
+    padding: 12px 18px;
+    border-radius: 16px;
+    color: #7b8a84;
+    margin: 3px 0;
+}
+
+#entry:selected {
+    background-color: #00ff9c;
+    color: #02130c;
+    font-weight: bold;
+}
+
+#entry:hover {
+    background-color: rgba(0, 255, 156, 0.08);
+    color: #d8e3d4;
+}
+
+#text {
+    color: inherit;
+    margin-left: 12px;
+}
+
+#img {
+    border-radius: 12px;
+}

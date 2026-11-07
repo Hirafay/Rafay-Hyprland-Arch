@@ -1,0 +1,131 @@
+/* swaync — nightwire — phosphor-void */
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+@define-color bg #05070a;
+@define-color bg-alt #0a0e14;
+@define-color surface #141b24;
+@define-color fg #d8e3d4;
+@define-color fg-dim #7b8a84;
+@define-color accent #00ff9c;
+@define-color red #ff003c;
+@define-color yellow #ffb000;
+@define-color blue #00e5ff;
+
+.control-center {
+  background: alpha(@bg, 0.95);
+  border: 1px solid alpha(@accent, 0.3);
+  border-radius: 18px;
+  padding: 10px;
+}
+
+.notification-row {
+  outline: none;
+  background: transparent;
+  padding: 6px 0;
+}
+
+.notification {
+  background: @bg-alt;
+  border: 1px solid alpha(@accent, 0.25);
+  border-radius: 18px;
+  margin: 2px 4px;
+  padding: 0;
+  color: @fg;
+}
+
+.notification.critical {
+  border-color: @red;
+  background: alpha(@red, 0.08);
+}
+
+.notification-content {
+  padding: 10px;
+}
+
+.summary {
+  color: @accent;
+  font-weight: bold;
+}
+
+.body {
+  color: @fg;
+  margin-top: 2px;
+}
+
+.close-button {
+  background: transparent;
+  color: @fg-dim;
+  border-radius: 999px;
+  margin: 2px;
+  padding: 2px 6px;
+}
+
+.close-button:hover {
+  background: alpha(@red, 0.3);
+  color: @fg;
+}
+
+.control-center-list {
+  background: transparent;
+}
+
+.widget-title {
+  color: @accent;
+  margin: 6px 4px;
+  font-weight: bold;
+}
+
+.widget-title > button {
+  background: alpha(@accent, 0.1);
+  color: @accent;
+  border-radius: 18px;
+  padding: 4px 10px;
+  border: 1px solid alpha(@accent, 0.25);
+}
+
+.widget-dnd {
+  margin: 6px 4px;
+  color: @fg;
+}
+
+.widget-dnd > switch {
+  background: @surface;
+  border-radius: 999px;
+}
+.widget-dnd > switch:checked {
+  background: @accent;
+}
+
+.widget-mpris {
+  background: @bg-alt;
+  border-radius: 18px;
+  margin: 6px 4px;
+  padding: 10px;
+  color: @fg;
+}
+
+.widget-volume,
+.widget-backlight {
+  background: @bg-alt;
+  border-radius: 18px;
+  margin: 6px 4px;
+  padding: 8px 10px;
+  color: @fg;
+}
+
+trough {
+  background: @surface;
+  border-radius: 999px;
+  min-height: 8px;
+}
+highlight {
+  background: @accent;
+  border-radius: 999px;
+}

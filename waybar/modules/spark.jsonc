@@ -1,0 +1,8 @@
+{
+  "custom/cpu-spark": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/scripts/cpu-spark.sh 2> /dev/null",
+    "interval": 2,
+    "tooltip-format": "CPU last ~40s"
+  }
+}

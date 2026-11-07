@@ -1,0 +1,187 @@
+@import "colors.css";
+
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE widget shell — lush rounded pills, working selectors
+ *  Targets the standard waybar group ids (#distro-group, #audio,
+ *  #connections, #system, #storage, #tray-group) so everything
+ *  actually binds.
+ * ──────────────────────────────────────────────────────────── */
+
+/*======= APP LAUNCHER (distro drawer) =======*/
+#distro-group {
+  margin: 4px 4px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @primary;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#distro-group:hover {
+  background-color: @surface_container_high;
+  border-color: @primary;
+}
+
+#custom-distro {
+  color: @primary;
+  padding: 6px 16px 6px 14px;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+#custom-terminal  { color: @primary;            padding: 0 10px; font-size: 13pt; }
+#custom-code      { color: @tertiary;           padding: 0 10px; font-size: 13pt; }
+#custom-office    { color: @warning;            padding: 0 10px; font-size: 13pt; }
+#custom-obsidian  { color: @secondary;          padding: 0 10px; font-size: 13pt; }
+#custom-files     { color: @tertiary_fixed_dim; padding: 0 10px; font-size: 13pt; }
+#custom-spotify   { color: @primary_fixed_dim;  padding: 0 10px; font-size: 13pt; }
+#custom-browser   { color: @secondary_fixed_dim;padding: 0 14px 0 10px; font-size: 13pt; }
+
+/*======= STATE TOGGLES (power mode, idle) =======*/
+#power-profiles-daemon,
+#idle_inhibitor {
+  margin: 4px 3px;
+  padding: 6px 14px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @secondary_fixed_dim;
+  font-size: 13pt;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#power-profiles-daemon:hover,
+#idle_inhibitor:hover {
+  border-color: @primary;
+  background-color: @surface_container_high;
+}
+
+/*======= DATA CAPSULES — sys / storage / audio / net =======*/
+#audio,
+#connections,
+#system,
+#storage {
+  margin: 4px 3px;
+  padding: 4px 4px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @primary_fixed_dim;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#audio:hover,
+#connections:hover,
+#system:hover,
+#storage:hover {
+  background-color: @surface_container_high;
+  border-color: @primary;
+}
+
+/* inline icons inside capsules */
+#disk,
+#memory,
+#cpu,
+#temperature,
+#bluetooth {
+  margin-right: 2px;
+  padding: 0 10px;
+  font-feature-settings: "tnum" 1;
+}
+
+#network {
+  padding: 0 12px 0 6px;
+  font-feature-settings: "tnum" 1;
+}
+
+#pulseaudio {
+  margin: 0 6px 0 10px;
+}
+
+/*======= MEDIA CARD =======*/
+#custom-media {
+  margin: 4px 3px;
+  padding: 6px 16px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @secondary_fixed_dim;
+  font-feature-settings: "tnum" 1;
+  min-width: 160px;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#custom-media.playing {
+  color: @primary;
+  background-color: @primary_container;
+  border-color: @primary;
+}
+#custom-media.paused  { color: @on_surface_variant; }
+#custom-media:hover    { border-color: @primary; }
+
+/*======= SPECTRUM (cava) =======*/
+#custom-cava {
+  margin: 4px 3px;
+  padding: 2px 12px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @primary;
+  font-family: "JetBrainsMono Nerd Font";
+  letter-spacing: 1px;
+  min-width: 120px;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#custom-cava:hover {
+  border-color: @primary;
+  background-color: @surface_container_high;
+}
+
+/*======= CPU SPARKLINE =======*/
+#custom-cpu-spark {
+  margin: 4px 3px;
+  padding: 6px 14px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @secondary;
+  letter-spacing: -1px;
+  font-feature-settings: "tnum" 1;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#custom-cpu-spark:hover {
+  border-color: @secondary;
+  background-color: @surface_container_high;
+}
+
+/*======= TRAY =======*/
+#tray-group {
+  margin: 4px 4px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#tray-group:hover {
+  border-color: @primary;
+  background-color: @surface_container_high;
+}
+
+#custom-tray-arrow {
+  padding: 6px 14px 6px 12px;
+  color: @primary;
+  font-size: 14pt;
+}
+
+#tray {
+  padding: 6px 10px;
+}
+
+#tray > .passive,
+#tray > .active,
+#tray > .needs-attention {
+  -gtk-icon-effect: none;
+}

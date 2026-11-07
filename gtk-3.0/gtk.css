@@ -1,0 +1,38 @@
+/* nightwire accent patches on top of Adwaita-dark */
+
+@define-color accent_color #00ff9c;
+@define-color accent_bg_color #00ff9c;
+@define-color accent_fg_color #05070a;
+
+@define-color destructive_color #ff003c;
+@define-color destructive_bg_color #ff003c;
+
+@define-color success_color #00ff9c;
+@define-color warning_color #ffb000;
+@define-color error_color #ff003c;
+
+/* dim borders to match the rice */
+window, .background {
+  background-color: #05070a;
+  color: #d8e3d4;
+}
+
+decoration {
+  border-radius: 14px;
+}
+
+/* server-side decoration fallback */
+decoration-overlay {
+  border-radius: 14px;
+}
+
+headerbar, .titlebar {
+  background: #0a0e14;
+  color: #d8e3d4;
+}
+
+button.suggested-action,
+.suggested-action button {
+  background-color: #00ff9c;
+  color: #05070a;
+}

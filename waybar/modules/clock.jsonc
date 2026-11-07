@@ -1,0 +1,29 @@
+{
+  "clock": {
+    "timezone": "Asia/Karachi",
+    "interval": 1,
+    "format": "󰃰  <span>{:%H:%M:%S}</span>",
+    "format-alt": "󰃰  <span>{:%A, %d %B %Y}</span>",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode"          : "year",
+      "mode-mon-col"  : 3,
+      "weeks-pos"     : "right",
+      "on-scroll"     : 1,
+      "format": {
+        "months":     "<span color='#00ff9c'><b>{}</b></span>",
+        "days":       "<span color='#d8e3d4'>{}</span>",
+        "weeks":      "<span color='#00e5ff'><b>W{}</b></span>",
+        "weekdays":   "<span color='#ff2975'><b>{}</b></span>",
+        "today":      "<span color='#ff2975'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions":  {
+      "on-click-right": "mode",
+      "on-click-forward":  "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up":   "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE — SwayOSD bezel (lush)
+ * ──────────────────────────────────────────────────────────── */
+
+window#osd {
+  background: alpha(#05070a, 0.92);
+  border: 2px solid alpha(#00ff9c, 0.55);
+  border-radius: 24px;
+  padding: 14px 24px;
+  margin: 24px;
+}
+
+window#osd image,
+window#osd label {
+  color: #d8e3d4;
+  padding: 4px 10px;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+window#osd progressbar {
+  min-height: 10px;
+  background: #1b2330;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+
+window#osd progressbar > trough {
+  background: transparent;
+  border: none;
+}
+
+window#osd progressbar > trough > progress {
+  background: #00ff9c;
+  border-radius: 999px;
+}

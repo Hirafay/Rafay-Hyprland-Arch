@@ -1,0 +1,19 @@
+{
+  "custom/media": {
+    "format": "{icon}  {}",
+    "escape": true,
+    "return-type": "json",
+    "max-length": 48,
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "on-click-middle": "playerctl previous",
+    "on-scroll-up": "playerctl volume 0.05+",
+    "on-scroll-down": "playerctl volume 0.05-",
+    "exec": "$HOME/.config/waybar/scripts/media.sh 2> /dev/null",
+    "format-icons": {
+      "Playing": "󰎈",
+      "Paused":  "󰏤",
+      "Stopped": "󰓛"
+    }
+  }
+}

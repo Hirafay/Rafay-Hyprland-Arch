@@ -1,0 +1,14 @@
+[SddmGreeterTheme]
+Name=nightwire
+Description=Rafay's Hyprland rice — NIGHTWIRE greeter. Terminal-HUD, boot-log cold-start, CRT scanlines, matrix rain.
+Author=Rafay (github.com/Hirafay)
+License=MIT
+Type=sddm-theme
+Version=2.0
+Website=https://github.com/Hirafay/Rafay-Hyprland-Arch
+Screenshot=wall.png
+MainScript=Main.qml
+ConfigFile=theme.conf
+TranslationsDirectory=translations
+Theme-Id=nightwire
+Theme-API=2.0

@@ -1,0 +1,57 @@
+// ──────────────────────────────────────────────────────────────
+//  NIGHTWIRE — waybar config (top bar, lush, working)
+//  Proven horizontal layout. Three zones. Standard group names
+//  so everything binds. Transparent bar, each capsule its own
+//  rounded island.
+// ──────────────────────────────────────────────────────────────
+{
+  "layer": "top",
+  "position": "top",
+  "height": 44,
+  "spacing": 4,
+  "margin-top": 8,
+  "margin-left": 12,
+  "margin-right": 12,
+  "reload_style_on_change": true,
+
+  "include": [
+    "./modules/groups.jsonc",
+    "./modules/distro.jsonc",
+    "./modules/storage.jsonc",
+    "./modules/system.jsonc",
+    "./modules/power-profiles-daemon.jsonc",
+    "./modules/workspace.jsonc",
+    "./modules/idle-ihibitor.jsonc",
+    "./modules/audio.jsonc",
+    "./modules/connections.jsonc",
+    "./modules/battery.jsonc",
+    "./modules/clock.jsonc",
+    "./modules/tray-notif.jsonc",
+    "./modules/media.jsonc",
+    "./modules/cava.jsonc",
+    "./modules/spark.jsonc"
+  ],
+
+  "modules-left": [
+    "group/distro-group",
+    "group/storage",
+    "group/system",
+    "custom/cpu-spark"
+  ],
+
+  "modules-center": [
+    "power-profiles-daemon",
+    "hyprland/workspaces",
+    "idle_inhibitor"
+  ],
+
+  "modules-right": [
+    "custom/media",
+    "custom/cava",
+    "group/audio",
+    "group/connections",
+    "battery",
+    "clock",
+    "group/tray-group"
+  ]
+}

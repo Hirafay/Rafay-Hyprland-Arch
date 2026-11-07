@@ -1,0 +1,74 @@
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE palette — phosphor-void
+ *  Swap this file alone to reskin every waybar widget. All other
+ *  token files @import this and reference @define-color entries.
+ * ──────────────────────────────────────────────────────────── */
+
+/* base surfaces — void, 4% luminance lift per tier */
+@define-color background         #05070a;
+@define-color surface            #0a0e14;
+@define-color surface_container  #0f141c;
+@define-color surface_container_high     #141b24;
+@define-color surface_container_highest  #1b2330;
+@define-color surface_bright     #26303e;
+@define-color surface_dim        #02030544;
+
+/* foreground — bone with phosphor cast */
+@define-color on_background      #d8e3d4;
+@define-color on_surface         #d8e3d4;
+@define-color on_surface_variant #7b8a84;
+@define-color outline            #00ff9c;
+@define-color outline_variant    #1b2d26;
+
+/* primary — phosphor green */
+@define-color primary            #00ff9c;
+@define-color on_primary         #02130c;
+@define-color primary_container  #002818;
+@define-color on_primary_container #7effc4;
+@define-color primary_fixed      #00ff9c;
+@define-color primary_fixed_dim  #4dffb8;
+
+/* secondary — hot magenta */
+@define-color secondary          #ff2975;
+@define-color on_secondary       #130208;
+@define-color secondary_container #2a0514;
+@define-color secondary_fixed    #ff2975;
+@define-color secondary_fixed_dim #ff6ca3;
+
+/* tertiary — cyan */
+@define-color tertiary           #00e5ff;
+@define-color on_tertiary        #021216;
+@define-color tertiary_container #002a30;
+@define-color tertiary_fixed     #00e5ff;
+@define-color tertiary_fixed_dim #66eeff;
+
+/* state */
+@define-color warning            #ffb000;
+@define-color error              #ff003c;
+@define-color on_error           #15000a;
+@define-color error_container    #2a0010;
+@define-color on_error_container #ff7a9a;
+
+/* cascade compat — widget.css references these */
+@define-color inverse_on_surface #02130c;
+@define-color inverse_surface    #d8e3d4;
+@define-color inverse_primary    #00ff9c;
+@define-color surface_tint       #00ff9c;
+@define-color shadow             #00ff9c;
+@define-color scrim              #000000;
+@define-color source_color       #00ff9c;
+
+@define-color surface_container_low    #0a0e14;
+@define-color surface_container_lowest #02030a;
+
+@define-color on_primary_fixed          #02130c;
+@define-color on_primary_fixed_variant  #002818;
+@define-color on_secondary_fixed        #130208;
+@define-color on_secondary_fixed_variant #2a0514;
+@define-color on_tertiary_fixed         #021216;
+@define-color on_tertiary_fixed_variant #002a30;
+
+/* NIGHTWIRE: glow + grid */
+@define-color edge_glow          rgba(0, 255, 156, 0.22);
+@define-color grid_line          rgba(0, 255, 156, 0.08);
+@define-color data_dim           #4a5a52;

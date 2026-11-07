@@ -1,0 +1,77 @@
+@import "colors.css";
+
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE workspaces — standard #workspaces selector
+ *  Lush rounded capsule with slide-in active indicator.
+ * ──────────────────────────────────────────────────────────── */
+
+#workspaces {
+  margin: 4px 4px;
+  padding: 4px 6px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#workspaces:hover {
+  border-color: @primary;
+  background-color: @surface_container_high;
+}
+
+#workspaces button {
+  min-width: 16px;
+  padding: 0 8px;
+  margin: 0 2px;
+  background: transparent;
+  border-radius: 16px;
+  color: @on_surface_variant;
+  font-size: 11pt;
+  transition: all 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#workspaces button:hover {
+  background-color: @surface_container_highest;
+  color: @primary;
+}
+
+#workspaces button.active {
+  padding: 0 18px;
+  background-color: @primary;
+  color: @on_primary;
+  font-weight: bold;
+}
+
+#workspaces button.active:hover {
+  background-color: @primary_fixed_dim;
+}
+
+#workspaces button.empty {
+  color: @data_dim;
+  padding: 0 5px;
+  min-width: 10px;
+}
+
+#workspaces button.special {
+  color: @secondary;
+  background-color: @secondary_container;
+}
+
+#workspaces button.urgent {
+  color: @error;
+  background: @error_container;
+}
+
+#workspaces button label:first-child {
+  margin-right: 6px;
+}
+
+#workspaces button label:last-child {
+  margin-left: 2px;
+  color: @secondary_fixed_dim;
+  font-size: 10pt;
+}
+
+#workspaces button.active label:last-child {
+  color: @on_primary;
+}

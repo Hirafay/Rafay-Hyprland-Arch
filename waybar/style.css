@@ -1,0 +1,46 @@
+@import "tokens/colors.css";
+@import "tokens/state.css";
+@import "tokens/workspace.css";
+@import "tokens/widget.css";
+@import "tokens/batt-clock.css";
+@import "tokens/slider.css";
+
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE — FLOATING ISLANDS
+ *  Bar is a ghost. Every island suspends itself.
+ *  JetBrains Mono locked for cohesion.
+ * ──────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  min-height: 0px;
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "JetBrainsMono NF", monospace;
+  font-weight: 600;
+  font-size: 12pt;
+  text-shadow: none;
+}
+
+window#waybar {
+  background: transparent;
+  color: @on_surface;
+}
+
+window#waybar.hidden { opacity: 0; }
+
+tooltip {
+  background-color: @surface_container_high;
+  border: 1px solid @primary;
+  border-radius: 14px;
+  color: @on_surface;
+  padding: 4px 6px;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 10pt;
+}
+
+tooltip label {
+  color: @on_surface;
+  padding: 2px 6px;
+}

@@ -1,0 +1,47 @@
+@import "colors.css";
+
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE state — neon warns, hard criticals, pulse on fail
+ * ──────────────────────────────────────────────────────────── */
+
+#custom-tray-arrow.inhibited-none,
+#custom-tray-arrow.dnd-none,
+#battery.charging,
+#power-profiles-daemon.power-saver {
+  color: @primary;
+}
+
+#idle_inhibitor.activated,
+#cpu.warning,
+#disk.warning,
+#memory.warning,
+#battery.warning:not(.charging),
+#custom-tray-arrow.notification,
+#custom-tray-arrow.dnd-notification,
+#custom-tray-arrow.inhibited-notification {
+  color: @warning;
+}
+
+#network.disabled,
+#cpu.critical,
+#disk.critical,
+#memory.critical,
+#temperature.critical,
+#battery.critical:not(.charging),
+#power-profiles-daemon.performance,
+#custom-tray-arrow.dnd-inhibited-none,
+#custom-tray-arrow.dnd-inhibited-notification {
+  color: @error;
+}
+
+/* critical pulses its border */
+#battery.critical:not(.charging),
+#temperature.critical {
+  border-color: @error;
+  animation: pulse-err 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-err {
+  0%, 100% { border-color: @error; background-color: @surface_container; }
+  50%      { border-color: @error; background-color: @error_container; }
+}

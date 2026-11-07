@@ -1,0 +1,323 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1700" font-family="JetBrains Mono, Fira Code, Menlo, monospace">
+  <defs>
+    <linearGradient id="void" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#05070a"/>
+      <stop offset="1" stop-color="#02030a"/>
+    </linearGradient>
+    <radialGradient id="crt" cx="0.5" cy="0.5" r="0.8">
+      <stop offset="0.0" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.75" stop-color="#000" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.8"/>
+    </radialGradient>
+    <linearGradient id="phosphorBorder" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00ff9c"/>
+      <stop offset="0.5" stop-color="#00e5ff"/>
+      <stop offset="1" stop-color="#ff2975"/>
+    </linearGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00ff9c" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <pattern id="scanlines" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#00ff9c" opacity="0.04"/>
+    </pattern>
+  </defs>
+
+  <!-- ====================================================== -->
+  <!-- PANEL 1: Desktop with top waybar (lush, working)        -->
+  <!-- ====================================================== -->
+  <rect width="1600" height="700" fill="url(#void)"/>
+  <rect width="1600" height="700" fill="url(#grid)"/>
+
+  <text x="40" y="36" fill="#00ff9c" font-size="12" font-weight="bold">NIGHTWIRE // top waybar · hyprland · hero clock</text>
+  <text x="1560" y="36" fill="#7b8a84" font-size="11" text-anchor="end">preview · 1920 × 1080</text>
+
+  <!-- ===== WAYBAR (top, height=44, y=56, 12px side margins) ===== -->
+
+  <!-- LEFT: distro pill -->
+  <g transform="translate(50,56)">
+    <rect width="56" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="28" y="24" fill="#00ff9c" font-size="18" font-weight="bold" text-anchor="middle"></text>
+  </g>
+
+  <!-- storage pill (disk + mem icons) -->
+  <g transform="translate(116,56)">
+    <rect width="92" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="24" y="24" fill="#4dffb8" font-size="15" font-weight="bold">󱙋</text>
+    <text x="64" y="24" fill="#4dffb8" font-size="15" font-weight="bold">󰍛</text>
+  </g>
+
+  <!-- system pill (temp + cpu icons) -->
+  <g transform="translate(218,56)">
+    <rect width="92" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="24" y="24" fill="#4dffb8" font-size="15" font-weight="bold"></text>
+    <text x="64" y="24" fill="#4dffb8" font-size="15" font-weight="bold">󰻠</text>
+  </g>
+
+  <!-- cpu sparkline pill -->
+  <g transform="translate(320,56)">
+    <rect width="168" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="16" y="26" fill="#ff2975" font-size="16" font-weight="bold" letter-spacing="-1" font-family="monospace">▁▂▃▂▄▅▆▅▃▂▃▄▅▇▆▄▃▂▁▂</text>
+  </g>
+
+  <!-- CENTER: power profile -->
+  <g transform="translate(676,56)">
+    <rect width="46" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="23" y="25" fill="#4dffb8" font-size="18" font-weight="bold" text-anchor="middle">󰶘</text>
+  </g>
+
+  <!-- workspaces pill -->
+  <g transform="translate(732,56)">
+    <rect width="236" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <!-- w1 -->
+    <circle cx="32" cy="18" r="3" fill="#7b8a84"/>
+    <!-- w2 active -->
+    <rect x="48" y="7" width="76" height="22" rx="11" fill="#00ff9c"/>
+    <circle cx="62" cy="18" r="3.5" fill="#02130c"/>
+    <text x="78" y="23" fill="#02130c" font-size="13" font-weight="bold">󰆍 󰨞</text>
+    <!-- w3 occupied -->
+    <circle cx="140" cy="18" r="4" fill="#ff6ca3"/>
+    <text x="154" y="23" fill="#ff6ca3" font-size="13"></text>
+    <text x="172" y="23" fill="#ff6ca3" font-size="13">󰹕</text>
+    <!-- w4/5 empty -->
+    <circle cx="196" cy="18" r="2.5" fill="#4a5a52"/>
+    <circle cx="212" cy="18" r="2.5" fill="#4a5a52"/>
+  </g>
+
+  <!-- idle inhibitor -->
+  <g transform="translate(978,56)">
+    <rect width="46" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="23" y="25" fill="#4dffb8" font-size="18" text-anchor="middle">󰛩</text>
+  </g>
+
+  <!-- RIGHT: media playing card -->
+  <g transform="translate(1038,56)">
+    <rect width="212" height="36" rx="18" fill="#002818" stroke="#00ff9c" stroke-width="1.5"/>
+    <text x="16" y="24" fill="#7effc4" font-size="14" font-weight="bold">󰎈  FKA — Baptism</text>
+  </g>
+
+  <!-- cava spectrum pill -->
+  <g transform="translate(1256,56)">
+    <rect width="118" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="59" y="26" fill="#00ff9c" font-size="15" font-weight="bold" letter-spacing="1" font-family="monospace" text-anchor="middle">▃▅▇▆▄▆█▇▅▃▂</text>
+  </g>
+
+  <!-- audio pill -->
+  <g transform="translate(1380,56)">
+    <rect width="54" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="27" y="24" fill="#4dffb8" font-size="14" font-weight="bold" text-anchor="middle">󰕾</text>
+  </g>
+
+  <!-- net pill (wifi) -->
+  <g transform="translate(1440,56)">
+    <rect width="40" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="20" y="25" fill="#4dffb8" font-size="15" text-anchor="middle">󰤨</text>
+  </g>
+
+  <!-- battery pill -->
+  <g transform="translate(1486,56)" filter="url(#softGlow)">
+    <rect width="64" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="32" y="24" fill="#4dffb8" font-size="12" font-weight="bold" text-anchor="middle">󱐋 89%</text>
+  </g>
+
+  <!-- HERO CLOCK — phosphor filled -->
+  <g transform="translate(60,122)" opacity="0"/>
+  <g transform="translate(1556,56)">
+    <!-- hero clock; placed so it extends slightly beyond right edge, ok for preview -->
+  </g>
+
+  <!-- actually put hero clock above with glow halo -->
+  <g transform="translate(1556,56)" filter="url(#softGlow)">
+    <rect width="38" height="0" fill="transparent"/>
+  </g>
+
+  <!-- correct hero clock placement -->
+  <g transform="translate(1058,110)">
+    <!-- position clock below the media as its own row? no — keep single row -->
+    <rect opacity="0"/>
+  </g>
+
+  <!-- single row: push clock right -->
+  <g transform="translate(60,110)">
+    <text x="0" y="0" fill="#4a5a52" font-size="10" opacity="0">x</text>
+  </g>
+
+  <!-- Erase stale battery+area, redo right cluster with clock inline on row 1 -->
+  <rect x="1486" y="56" width="110" height="36" fill="#05070a"/>
+
+  <!-- redo right-side cluster at right-anchored x values -->
+  <g transform="translate(1380,56)">
+    <rect width="54" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="27" y="24" fill="#4dffb8" font-size="14" font-weight="bold" text-anchor="middle">󰕾</text>
+  </g>
+
+  <!-- shift pattern: audio 1380, net 1440, bat 1486, clock 1552 won't fit — rescale -->
+  <!-- cleaner approach: reduce media width and keep original compact -->
+
+  <rect x="1038" y="56" width="562" height="36" fill="#05070a"/><!-- erase right cluster -->
+
+  <!-- redo right with proper fit: media narrower, then cava, then audio icon, net icon, battery, CLOCK as hero last -->
+  <g transform="translate(960,56)">
+    <rect width="168" height="36" rx="18" fill="#002818" stroke="#00ff9c" stroke-width="1.5"/>
+    <text x="14" y="24" fill="#7effc4" font-size="13" font-weight="bold">󰎈  FKA — Baptism</text>
+  </g>
+
+  <g transform="translate(1136,56)">
+    <rect width="104" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="52" y="26" fill="#00ff9c" font-size="14" font-weight="bold" letter-spacing="1" font-family="monospace" text-anchor="middle">▃▅▇▆▄▆▇▅▃</text>
+  </g>
+
+  <g transform="translate(1248,56)">
+    <rect width="44" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="22" y="24" fill="#4dffb8" font-size="14" font-weight="bold" text-anchor="middle">󰕾</text>
+  </g>
+
+  <g transform="translate(1300,56)">
+    <rect width="44" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="22" y="24" fill="#4dffb8" font-size="15" text-anchor="middle">󰤨</text>
+  </g>
+
+  <g transform="translate(1352,56)">
+    <rect width="64" height="36" rx="18" fill="#0f141c" stroke="#1b2d26" stroke-width="1"/>
+    <text x="32" y="24" fill="#4dffb8" font-size="12" font-weight="bold" text-anchor="middle">󱐋 89%</text>
+  </g>
+
+  <!-- HERO CLOCK — phosphor filled with glow halo -->
+  <g transform="translate(1424,54)" filter="url(#softGlow)">
+    <rect x="-3" y="-3" width="152" height="46" rx="22" fill="#00ff9c" opacity="0.22"/>
+  </g>
+  <g transform="translate(1424,54)">
+    <rect width="146" height="40" rx="20" fill="#00ff9c" stroke="#4dffb8" stroke-width="2"/>
+    <text x="73" y="26" fill="#02130c" font-size="14" font-weight="bold" text-anchor="middle" letter-spacing="1.5">󰃰 23:47:12</text>
+  </g>
+
+  <!-- tray circle on far right would not fit here; mention in caption -->
+
+  <!-- ===== HYPRLAND WINDOW (kitty, active) ===== -->
+  <g transform="translate(60,140)">
+    <rect x="-10" y="-10" width="1480" height="540" rx="24" fill="#00ff9c" fill-opacity="0.08" filter="url(#softGlow)"/>
+    <rect width="1480" height="520" fill="#0a0e14" fill-opacity="0.9" stroke="url(#phosphorBorder)" stroke-width="2" rx="16"/>
+    <g font-size="12" font-family="JetBrains Mono, monospace">
+      <text x="30" y="36" fill="#00ff9c" font-weight="bold">rafay</text><text x="72" y="36" fill="#7b8a84">@</text><text x="82" y="36" fill="#4dffb8" font-weight="bold">multan</text><text x="142" y="36" fill="#d8e3d4">:</text><text x="150" y="36" fill="#00e5ff">~/dev/overdrive-x</text><text x="286" y="36" fill="#ff2975" font-weight="bold">❯</text><text x="300" y="36" fill="#d8e3d4">neofetch</text>
+
+      <text x="30" y="68" fill="#00ff9c">     -o-     </text><text x="152" y="68" fill="#00ff9c" font-weight="bold">rafay@multan</text>
+      <text x="30" y="86" fill="#00ff9c">    -ooo-    </text><text x="152" y="86" fill="#7b8a84">──────────────────</text>
+      <text x="30" y="104" fill="#00ff9c">   -ooooo-   </text><text x="152" y="104" fill="#ff2975" font-weight="bold">OS</text><text x="192" y="104" fill="#d8e3d4">Arch Linux x86_64</text>
+      <text x="30" y="122" fill="#00ff9c">  -ooooooo-  </text><text x="152" y="122" fill="#ff2975" font-weight="bold">Kernel</text><text x="214" y="122" fill="#d8e3d4">6.11.5-zen1-1-zen</text>
+      <text x="30" y="140" fill="#00ff9c"> -ooooooooo- </text><text x="152" y="140" fill="#ff2975" font-weight="bold">WM</text><text x="192" y="140" fill="#d8e3d4">Hyprland (wayland)</text>
+      <text x="30" y="158" fill="#00ff9c">-ooooooooooo-</text><text x="152" y="158" fill="#ff2975" font-weight="bold">Rice</text><text x="200" y="158" fill="#00ff9c" font-weight="bold">NIGHTWIRE 2.0</text>
+      <text x="30" y="176" fill="#00ff9c"> -ooooo-       -ooooo-</text><text x="152" y="176" fill="#ff2975" font-weight="bold">Shell</text><text x="208" y="176" fill="#d8e3d4">fish 3.7.1 · starship</text>
+      <text x="30" y="194" fill="#00ff9c">              </text><text x="152" y="194" fill="#ff2975" font-weight="bold">Term</text><text x="200" y="194" fill="#d8e3d4">kitty · JetBrainsMono</text>
+      <text x="30" y="212" fill="#00ff9c">              </text><text x="152" y="212" fill="#ff2975" font-weight="bold">Theme</text><text x="208" y="212" fill="#d8e3d4">phosphor-void</text>
+
+      <g transform="translate(152,228)">
+        <rect x="0"   y="0" width="16" height="16" fill="#0a0e14" rx="3"/>
+        <rect x="20"  y="0" width="16" height="16" fill="#ff003c" rx="3"/>
+        <rect x="40"  y="0" width="16" height="16" fill="#00ff9c" rx="3"/>
+        <rect x="60"  y="0" width="16" height="16" fill="#ffb000" rx="3"/>
+        <rect x="80"  y="0" width="16" height="16" fill="#00e5ff" rx="3"/>
+        <rect x="100" y="0" width="16" height="16" fill="#ff2975" rx="3"/>
+        <rect x="120" y="0" width="16" height="16" fill="#00e5ff" rx="3"/>
+        <rect x="140" y="0" width="16" height="16" fill="#d8e3d4" rx="3"/>
+      </g>
+
+      <text x="30" y="286" fill="#00ff9c" font-weight="bold">rafay</text><text x="72" y="286" fill="#7b8a84">@</text><text x="82" y="286" fill="#4dffb8" font-weight="bold">multan</text><text x="142" y="286" fill="#d8e3d4">:</text><text x="150" y="286" fill="#00e5ff">~/dev/overdrive-x</text><text x="286" y="286" fill="#ff2975" font-weight="bold">❯</text><text x="300" y="286" fill="#d8e3d4">btop</text>
+
+      <rect x="30" y="302" width="440" height="112" rx="12" fill="#0f141c" stroke="#00ff9c" stroke-width="1" stroke-opacity="0.35"/>
+      <text x="48" y="322" fill="#00ff9c" font-weight="bold">◆ CPU</text>
+      <text x="100" y="322" fill="#4a5a52">·  54°C  ·  Ryzen 7</text>
+      <g transform="translate(48,332)">
+        <polyline points="0,40 20,32 40,18 60,24 80,8 100,16 120,22 140,10 160,30 180,20 200,12 220,24 240,34 260,20 280,8 300,16 320,24 340,30 360,18 380,6" fill="none" stroke="#00ff9c" stroke-width="1.5" opacity="0.85"/>
+      </g>
+      <text x="48" y="400" fill="#4dffb8" font-weight="bold">▰▰▰▰▰▰▰▱▱▱</text>
+      <text x="200" y="400" fill="#4a5a52">23% cur</text>
+
+      <rect x="490" y="302" width="440" height="112" rx="12" fill="#0f141c" stroke="#ff2975" stroke-width="1" stroke-opacity="0.35"/>
+      <text x="508" y="322" fill="#ff2975" font-weight="bold">◆ MEM</text>
+      <text x="560" y="322" fill="#4a5a52">·  13.8G / 32G</text>
+      <rect x="508" y="340" width="400" height="12" rx="6" fill="#1b2330"/>
+      <rect x="508" y="340" width="172" height="12" rx="6" fill="#ff2975"/>
+      <text x="508" y="378" fill="#7b8a84" font-size="11">cached 4.1G</text>
+      <text x="610" y="378" fill="#7b8a84" font-size="11">free 14.2G</text>
+      <text x="508" y="402" fill="#ff6ca3" font-weight="bold">43%</text>
+
+      <rect x="950" y="302" width="500" height="112" rx="12" fill="#0f141c" stroke="#00e5ff" stroke-width="1" stroke-opacity="0.35"/>
+      <text x="968" y="322" fill="#00e5ff" font-weight="bold">◆ NET</text>
+      <text x="1020" y="322" fill="#4a5a52">·  wlp2s0  ·  89% signal</text>
+      <text x="968" y="352" fill="#4dffb8" font-weight="bold">↓ 2.4 MB/s</text>
+      <text x="1096" y="352" fill="#ff6ca3" font-weight="bold">↑ 220 KB/s</text>
+      <g transform="translate(968,360)">
+        <polyline points="0,40 20,36 40,32 60,20 80,28 100,10 120,16 140,24 160,12 180,8 200,14 220,20 240,18 260,10 280,4 300,16 320,22 340,8 360,14 380,20" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.8"/>
+      </g>
+
+      <text x="30" y="454" fill="#00ff9c" font-weight="bold">rafay</text><text x="72" y="454" fill="#7b8a84">@</text><text x="82" y="454" fill="#4dffb8" font-weight="bold">multan</text><text x="142" y="454" fill="#d8e3d4">:</text><text x="150" y="454" fill="#00e5ff">~/dev/overdrive-x</text><text x="286" y="454" fill="#ff2975" font-weight="bold">❯</text>
+      <rect x="296" y="442" width="10" height="18" fill="#00ff9c">
+        <animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+  </g>
+
+  <text x="60" y="690" fill="#4a5a52" font-size="11">left: launcher · storage · system · cpu-spark  ·  center: power-mode · workspaces · idle  ·  right: media · cava · audio · net · battery · hero-clock · tray</text>
+
+  <line x1="0" y1="700" x2="1600" y2="700" stroke="#1b2330" stroke-width="2"/>
+
+  <!-- ====================================================== -->
+  <!-- PANEL 2: SDDM greeter (unchanged)                       -->
+  <!-- ====================================================== -->
+  <g transform="translate(0,700)">
+    <rect width="1600" height="1000" fill="#05070a"/>
+    <g fill="#00ff9c" font-size="12" opacity="0.14" font-family="monospace">
+      <text x="30" y="80">0</text><text x="30" y="120">1</text><text x="30" y="160">0</text><text x="30" y="200">░</text><text x="30" y="240">1</text><text x="30" y="280">▒</text><text x="30" y="320">0</text>
+      <text x="70" y="60">1</text><text x="70" y="100">▓</text><text x="70" y="140">0</text><text x="70" y="180">1</text><text x="70" y="220">1</text><text x="70" y="260">░</text>
+      <text x="110" y="90">0</text><text x="110" y="130">1</text><text x="110" y="170">▒</text><text x="110" y="210">0</text><text x="110" y="250">1</text>
+      <text x="1480" y="80">1</text><text x="1480" y="120">0</text><text x="1480" y="160">░</text><text x="1480" y="200">1</text><text x="1480" y="240">0</text>
+      <text x="1520" y="60">▓</text><text x="1520" y="100">0</text><text x="1520" y="140">1</text><text x="1520" y="180">0</text><text x="1520" y="220">▒</text>
+      <text x="1560" y="90">0</text><text x="1560" y="130">1</text><text x="1560" y="170">█</text><text x="1560" y="210">0</text>
+    </g>
+    <rect width="1600" height="1000" fill="url(#scanlines)"/>
+    <rect width="1600" height="1000" fill="url(#crt)"/>
+
+    <text x="40" y="36" fill="#00ff9c" font-size="13" font-weight="bold">╔═ NIGHTWIRE ══ rafay-hyprland-arch ═╗</text>
+    <text x="458" y="36" fill="#ff2975" font-size="13">[ sddm-greeter · qt6 ]</text>
+    <text x="668" y="36" fill="#00e5ff" font-size="13">[ tty: dpy-0 ]</text>
+    <text x="1540" y="36" fill="#00ff9c" font-size="12" font-weight="bold">23:47:12</text>
+
+    <text x="800" y="280" fill="#00ff9c" font-size="170" font-weight="bold" text-anchor="middle" font-family="JetBrains Mono, monospace">23:47:12</text>
+    <text x="800" y="320" fill="#d8e3d4" font-size="18" font-weight="bold" text-anchor="middle" letter-spacing="1">SATURDAY · 07 NOV 2026</text>
+    <text x="800" y="345" fill="#ff2975" font-size="12" text-anchor="middle">// sync ok · drift 0.00ms · cosmic-ok</text>
+
+    <g transform="translate(530,420)">
+      <rect width="540" height="310" fill="#050e0b" fill-opacity="0.78" stroke="#00ff9c" stroke-width="1"/>
+      <rect x="14" y="-9" width="240" height="18" fill="#05070a"/>
+      <text x="22" y="4" fill="#00ff9c" font-size="12" font-weight="bold">╡ NIGHTWIRE // auth-prompt ╞</text>
+      <text x="30" y="60" fill="#7b8a84" font-size="14">&gt; login as</text>
+      <text x="115" y="60" fill="#00ff9c" font-size="14" font-weight="bold">[ rafay ]</text>
+      <text x="200" y="60" fill="#ff2975" font-size="10">▼</text>
+      <text x="30" y="88" fill="#1b2330" font-size="11" font-family="monospace">─────────────────────────────────────────────────</text>
+      <text x="30" y="115" fill="#7b8a84" font-size="14">&gt; passwd  :</text>
+      <text x="125" y="115" fill="#00ff9c" font-size="14" font-weight="bold">●●●●●●●●</text>
+      <rect x="213" y="104" width="2" height="16" fill="#00ff9c">
+        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      <line x1="125" y1="122" x2="470" y2="122" stroke="#00ff9c" stroke-width="1"/>
+      <text x="30" y="155" fill="#7b8a84" font-size="14">&gt; session :</text>
+      <text x="125" y="155" fill="#00e5ff" font-size="14" font-weight="bold">[ Hyprland ]</text>
+      <text x="30" y="183" fill="#1b2330" font-size="11" font-family="monospace">─────────────────────────────────────────────────</text>
+      <g transform="translate(30,200)">
+        <rect width="160" height="32" fill="#00ff9c" fill-opacity="0.08" stroke="#00ff9c" stroke-width="1"/>
+        <text x="80" y="22" fill="#00ff9c" font-size="13" font-weight="bold" text-anchor="middle">[ EXEC · login ]</text>
+        <rect x="178" y="0" width="48" height="32" fill="#00e5ff" fill-opacity="0.07" stroke="#00e5ff" stroke-width="1"/>
+        <text x="202" y="22" fill="#00e5ff" font-size="13" font-weight="bold" text-anchor="middle">[ R ]</text>
+        <rect x="234" y="0" width="48" height="32" fill="#ff003c" fill-opacity="0.08" stroke="#ff003c" stroke-width="1"/>
+        <text x="258" y="22" fill="#ff003c" font-size="13" font-weight="bold" text-anchor="middle">[ ⏻ ]</text>
+      </g>
+    </g>
+
+    <text x="40" y="970" fill="#00ff9c" font-size="12">╚═ nightwire · build 2.0.0 · rafay@multan</text>
+    <text x="1560" y="970" fill="#ff2975" font-size="12" font-weight="bold" text-anchor="end">[ F1 session ]  [ F2 user ]  [ ENTER login ]  [ ESC clear ]</text>
+    <text x="800" y="995" fill="#4a5a52" font-size="11" text-anchor="middle" font-style="italic">PREVIEW · SDDM greeter · NIGHTWIRE 2.0</text>
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+{
+  "custom/cava": {
+    "format": "{}",
+    "exec": "$HOME/.config/waybar/scripts/cava.sh 2> /dev/null",
+    "tooltip": false
+  }
+}

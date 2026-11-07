@@ -1,0 +1,42 @@
+@import "colors.css";
+
+/* ──────────────────────────────────────────────────────────────
+ *  NIGHTWIRE battery + clock
+ *  Battery as a standard pill. Clock as the phosphor-filled hero
+ *  on the right — the one piece painted in brand accent.
+ * ──────────────────────────────────────────────────────────── */
+
+#battery {
+  margin: 4px 3px;
+  padding: 6px 16px;
+  background-color: @surface_container;
+  border-radius: 22px;
+  color: @primary_fixed_dim;
+  font-feature-settings: "tnum" 1;
+  border: 1px solid transparent;
+  transition: all 250ms ease-out;
+}
+
+#battery:hover {
+  border-color: @primary;
+  background-color: @surface_container_high;
+}
+
+#clock {
+  margin: 4px 4px;
+  padding: 6px 20px;
+  background-color: @primary;
+  color: @on_primary;
+  border-radius: 22px;
+  font-weight: bold;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: 1.2px;
+  border: 2px solid @primary_fixed_dim;
+  transition: all 250ms ease-out;
+}
+
+#clock:hover {
+  background-color: @primary_fixed_dim;
+  color: @on_primary;
+  border-color: @primary;
+}
